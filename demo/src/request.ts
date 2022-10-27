@@ -8,7 +8,7 @@ export interface RequestParams {
   StreamID: string;
   SessionID: string;
   sdp: string;
-  ClientIP?: string;
+  ClientIp?: string;
   MuteAudio?: boolean;
   MuteVideo?: boolean;
   parameter?: string;
@@ -35,7 +35,7 @@ export const pushRequest = ({
   token,
   SessionID,
   sdp,
-  ClientIP,
+  ClientIp,
   MuteAudio,
   MuteVideo,
   parameter,
@@ -54,8 +54,8 @@ export const pushRequest = ({
     return item;
   });
   let res = arr.join("");
-  let url = ClientIP
-    ? `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ClientIP=${ClientIP}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`
+  let url = ClientIp
+    ? `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ClientIP=${ClientIp}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`
     : `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`;
   return fetch(url, {
     method: "POST",
@@ -63,6 +63,7 @@ export const pushRequest = ({
       "Content-Type": "application/sdp",
       Authorization: "Bearer " + token,
     },
+    mode: 'cors',
     body: sdp,
   }).then(async (r) => {
     if (r.status !== 201) {
@@ -86,7 +87,7 @@ export const pullRequest = ({
   sdp,
   MuteAudio,
   MuteVideo,
-  ClientIP,
+  ClientIp,
   // ip,
   parameter,
 }: PullParameters): Promise<ResponseParams> => {
@@ -116,8 +117,8 @@ export const pullRequest = ({
     return item;
   });
   let res = arr.join("");
-  let url = ClientIP
-    ? `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ClientIP=${ClientIP}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`
+  let url = ClientIp
+    ? `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ClientIP=${ClientIp}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`
     : `https://${Domain}/pull/${AppID}/${StreamID}?SessionID=${SessionID}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`;
   return fetch(url, requestInit).then(async (r) => {
     if (r.status !== 201) {

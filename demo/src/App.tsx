@@ -41,7 +41,7 @@ export interface IState {
   MuteAudio: boolean;
   MuteVideo: boolean;
   PullAuth: boolean;
-  ClientIP: string;
+  ClientIp: string;
   iceState: string;
   dtlsAudioState: string;
   dtlsVideoState: string;
@@ -73,9 +73,9 @@ export default class App extends React.Component<IProps, IState> {
     window.app = this;
     this.state = {
       mode: "push",
-      Domain: "",
-      AppID: "",
-      AppKey: "",
+      Domain: "test-openrtc.eaydu.com",
+      AppID: "c57f8ee5-96dc-491f-8238-e95005d68a36",
+      AppKey: "8d7611eb-e1ae-47eb-91e3-a03bdc1e4e2b",
       audioDeviceId: "",
       videoDeviceId: "",
       microphoneList: [],
@@ -88,7 +88,7 @@ export default class App extends React.Component<IProps, IState> {
       MuteAudio: false,
       MuteVideo: false,
       PullAuth: true,
-      ClientIP: "",
+      ClientIp: "",
       iceState: "",
       dtlsAudioState: "",
       dtlsVideoState: "",
@@ -178,7 +178,7 @@ export default class App extends React.Component<IProps, IState> {
     this.setState({ errorMessage: "" });
     this.getParameter();
     const {
-      ClientIP,
+      ClientIp,
       Domain,
       AppID,
       AppKey,
@@ -220,7 +220,7 @@ export default class App extends React.Component<IProps, IState> {
         SessionID,
         sdp: offerSdp!,
         token,
-        ClientIP,
+        ClientIp,
         MuteAudio,
         MuteVideo,
         parameter: parameter,
@@ -230,7 +230,7 @@ export default class App extends React.Component<IProps, IState> {
       this.setState(
         {
           visibility: true,
-          pullUrl: `${window.location.origin}${window.location.pathname}?mode=pull&Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&ClientIP=${ClientIP}&PullAuth=${PullAuth}&${parameter}`,
+          pullUrl: `${window.location.origin}${window.location.pathname}?mode=pull&Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&ClientIP=${ClientIp}&PullAuth=${PullAuth}&${parameter}`,
           pushUrl: `${window.location.origin}${window.location.pathname}?Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&${parameter}`,
         },
         () => {
@@ -250,7 +250,7 @@ export default class App extends React.Component<IProps, IState> {
 
   startPull = async () => {
     const {
-      ClientIP,
+      ClientIp,
       Domain,
       AppID,
       AppKey,
@@ -301,7 +301,7 @@ export default class App extends React.Component<IProps, IState> {
         SessionID: this.state.SessionID!,
         sdp: offerSdp!,
         token: PullAuth ? token : undefined,
-        ClientIP,
+        ClientIp,
         MuteAudio,
         MuteVideo,
         parameter,
@@ -451,7 +451,7 @@ export default class App extends React.Component<IProps, IState> {
       pushUrl,
       MuteAudio,
       MuteVideo,
-      ClientIP,
+      ClientIp,
       microphoneList,
       mediaList,
     } = this.state;
@@ -557,9 +557,9 @@ export default class App extends React.Component<IProps, IState> {
                   <Input
                     id="ClientIP"
                     style={{ width: 150 }}
-                    value={ClientIP}
-                    onChange={(v) => this.setState({ ClientIP: v })}
-                    placeholder="ClientIP"
+                    value={ClientIp}
+                    onChange={(v) => this.setState({ ClientIp: v })}
+                    placeholder="ClientIp"
                     allowClear
                   />
                 </Space>
