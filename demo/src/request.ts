@@ -56,7 +56,7 @@ export const pushRequest = ({
   let res = arr.join("");
   let url = ClientIp
     ? `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ClientIP=${ClientIp}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`
-    : `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`;
+    : `https://${Domain}/push/${AppID}/${StreamID}?SessionID=${SessionID}&ServerIP=47.94.224.122&MuteAudio=${MuteAudio}&MuteVideo=${MuteVideo}${res}`;
   return fetch(url, {
     method: "POST",
     headers: {
