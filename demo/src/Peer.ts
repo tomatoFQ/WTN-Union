@@ -246,7 +246,6 @@ export default class Peer extends EventEmitter {
       })
     );
     this.bindDtlsEvents();
-    answerSdp = answerSdp.replaceAll('120', '111').replaceAll('127', '125')
     await this.pc.setRemoteDescription(
       new RTCSessionDescription({
         type: "answer",
