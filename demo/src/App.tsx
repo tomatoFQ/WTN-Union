@@ -176,7 +176,7 @@ export default class App extends React.Component<IProps, IState> {
   startPush = async () => {
     this.peer?.destroy();
     this.setState({ errorMessage: "" });
-    this.getParameter();
+    await this.getParameter();
     const {
       ClientIp,
       Domain,
@@ -195,6 +195,21 @@ export default class App extends React.Component<IProps, IState> {
       Message.error("参数不全");
       return;
     }
+    let arr: string[] = [];
+    parameter?.split("&").map((item) => {
+      if (
+        item.split("=")[0] !== "Domain" &&
+        item.split("=")[0] !== "AppID" &&
+        item.split("=")[0] !== "AppKey" &&
+        item.split("=")[0] !== "StreamID" &&
+        item.split("=")[0] !== ""
+      ) {
+        arr.push("&" + item);
+      }
+      return item;
+    });
+    let res = arr.join("");
+    
     const unlock = await this._pubLock.lock(); // 锁
     try {
       const peer = new Peer();
@@ -230,8 +245,8 @@ export default class App extends React.Component<IProps, IState> {
       this.setState(
         {
           visibility: true,
-          pullUrl: `${window.location.origin}${window.location.pathname}?mode=pull&Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&ClientIP=${ClientIp}&PullAuth=${PullAuth}&${parameter}`,
-          pushUrl: `${window.location.origin}${window.location.pathname}?Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&${parameter}`,
+          pullUrl: `${window.location.origin}${window.location.pathname}?mode=pull&Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&ClientIP=${ClientIp}&PullAuth=${PullAuth}&${parameter}${res}`,
+          pushUrl: `${window.location.origin}${window.location.pathname}?Domain=${Domain}&AppID=${AppID}&AppKey=${AppKey}&StreamID=${StreamID}&${parameter}${res}`,
         },
         () => {
           peer.playVideo(this.videoRenderDom!);
@@ -249,6 +264,7 @@ export default class App extends React.Component<IProps, IState> {
   };
 
   startPull = async () => {
+    await this.getParameter();
     const {
       ClientIp,
       Domain,
