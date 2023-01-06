@@ -222,7 +222,7 @@ export default class App extends React.Component<IProps, IState> {
       const token = await generateToken({
         AppID,
         StreamID,
-        Action: "push",
+        Action: "pub",
         PullAuth,
         AppKey,
       });
@@ -304,7 +304,7 @@ export default class App extends React.Component<IProps, IState> {
       const token = await generateToken({
         AppID,
         StreamID,
-        Action: "pull",
+        Action: "sub",
         PullAuth,
         AppKey,
       });

@@ -26,8 +26,8 @@ export async function generateToken({
     action: Action,
     exp: Math.floor(Date.now() / 1000) + 3600,
   };
-  if (Action === "push") {
-    payload.enablePullAuth = !!PullAuth;
+  if (Action === "pub") {
+    payload.enableSubAuth = !!PullAuth;
   }
   const textEncoder = new TextEncoder();
   return await new jose.SignJWT(payload)
