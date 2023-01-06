@@ -67,10 +67,21 @@ export default class Peer extends EventEmitter {
   }
 
   // 采集&渲染
-  startCapture = (audioDeviceId: string, videoDeviceId: string) => {
+  startCapture = (audioDeviceId: string, videoDeviceId: string, resolution: string) => {
+    const [width, height] = resolution.split('*');
     return navigator.mediaDevices.getUserMedia({
       audio: { deviceId: audioDeviceId },
-      video: { deviceId: videoDeviceId },
+      video: { 
+        deviceId: videoDeviceId,
+        width: {
+          min: parseInt(width),
+          max: parseInt(width),
+        },
+        height: {
+          min: parseInt(height),
+          max: parseInt(height),
+        }
+      },
     });
   };
 
@@ -266,6 +277,18 @@ export default class Peer extends EventEmitter {
     }
   }
 
+  updateVideoTrack(track: MediaStreamTrack) {
+    if (this.videoTrack) {
+      this.videoTrack = track;
+    }
+    
+    for (const sender of this.pc.getSenders()) {
+      if (sender.track?.kind === 'video') {
+        sender.replaceTrack(track);
+        break;
+      }
+    }
+  }
   // 清空信息监听
   clearInterval() {
     window.clearInterval(this.info);

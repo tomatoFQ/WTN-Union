@@ -34,6 +34,7 @@ export interface IState {
   videoDeviceId: string;
   microphoneList: Array<any>;
   mediaList: Array<any>;
+  resolutionList: Array<any>;
   SessionID: string;
   pullUrl: string | undefined;
   pushUrl: string | undefined;
@@ -45,6 +46,7 @@ export interface IState {
   iceState: string;
   dtlsAudioState: string;
   dtlsVideoState: string;
+  captureResolution: string;
   resolution: string;
   frameRate: string;
   codeRate: string;
@@ -80,6 +82,10 @@ export default class App extends React.Component<IProps, IState> {
       videoDeviceId: "",
       microphoneList: [],
       mediaList: [],
+      resolutionList: [
+        {label: "320 * 240", value: "320*240"},
+        {label: "640 * 480", value: "640*480"}
+      ],
       StreamID: "",
       SessionID: "",
       pullUrl: undefined,
@@ -92,6 +98,7 @@ export default class App extends React.Component<IProps, IState> {
       iceState: "",
       dtlsAudioState: "",
       dtlsVideoState: "",
+      captureResolution: "640*480",
       resolution: "",
       frameRate: "",
       codeRate: "",
@@ -216,7 +223,8 @@ export default class App extends React.Component<IProps, IState> {
       this.peer = peer;
       const stream = await peer.startCapture(
         this.state.audioDeviceId,
-        this.state.videoDeviceId
+        this.state.videoDeviceId,
+        this.state.captureResolution,
       );
       const offerSdp = await peer.startPush(stream);
       const token = await generateToken({
@@ -453,6 +461,27 @@ export default class App extends React.Component<IProps, IState> {
     this.inited = true;
   }
 
+  async updateResolution() {
+    if (!navigator.mediaDevices) {
+      return;
+    }
+
+    if (!this.peer) {
+      return
+    }
+
+    const [width, height] = this.state.captureResolution.split('*');
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        deviceId: this.state.videoDeviceId,
+        width: parseInt(width), 
+        height: parseInt(height)
+      }
+    })
+
+    this.peer.updateVideoTrack(stream.getVideoTracks()[0])
+  }
+
   render() {
     const {
       Domain,
@@ -470,6 +499,7 @@ export default class App extends React.Component<IProps, IState> {
       ClientIp,
       microphoneList,
       mediaList,
+      resolutionList,
     } = this.state;
     return (
       <div className="Page">
@@ -584,7 +614,7 @@ export default class App extends React.Component<IProps, IState> {
                 <Space direction="vertical">
                   <Space>
                     <Select
-                      style={{ width: 200 }}
+                      style={{ width: 150 }}
                       placeholder="Select Microphone"
                       onChange={(v) => {
                         this.setState({
@@ -604,7 +634,7 @@ export default class App extends React.Component<IProps, IState> {
                       ))}
                     </Select>
                     <Select
-                      style={{ width: 200 }}
+                      style={{ width: 150 }}
                       placeholder="Select Camera"
                       onChange={(v) => {
                         this.setState({
@@ -620,6 +650,27 @@ export default class App extends React.Component<IProps, IState> {
                           value={media.deviceId}
                         >
                           {media.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                    <Select
+                      style={{ width: 150 }}
+                      placeholder="Resolution"
+                      value={this.state.captureResolution}
+                      onChange={(v) => {
+                        this.setState({
+                          ...this.state,
+                          captureResolution: v,
+                        }, this.updateResolution.bind(this));
+                      }}
+                    >
+                      {resolutionList.map((resolution) => (
+                        <Select.Option
+                          id="Resolution"
+                          key={resolution.value}
+                          value={resolution.value}
+                        >
+                          {resolution.label}
                         </Select.Option>
                       ))}
                     </Select>
