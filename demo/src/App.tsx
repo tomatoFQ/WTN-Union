@@ -76,8 +76,8 @@ export default class App extends React.Component<IProps, IState> {
     this.state = {
       mode: "push",
       Domain: "test-openrtc.eaydu.com",
-      AppID: "c57f8ee5-96dc-491f-8238-e95005d68a36",
-      AppKey: "8d7611eb-e1ae-47eb-91e3-a03bdc1e4e2b",
+      AppID: "bc22d5",
+      AppKey: "00eec858271ea752",
       audioDeviceId: "",
       videoDeviceId: "",
       microphoneList: [],
