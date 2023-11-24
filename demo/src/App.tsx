@@ -136,6 +136,9 @@ export default class App extends React.Component<IProps, IState> {
 
   //获取设备列表
   async getDeviceList() {
+    if (!navigator.mediaDevices) {
+      return;
+    }
     await navigator.mediaDevices.enumerateDevices().then((devices) => {
       devices.forEach((device) => {
         if (device.kind === "audioinput") {
