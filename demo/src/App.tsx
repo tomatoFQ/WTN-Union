@@ -75,7 +75,7 @@ export default class App extends React.Component<IProps, IState> {
     window.app = this;
     this.state = {
       mode: "push",
-      Domain: "test-openrtc.eaydu.com",
+      Domain: window.location.hostname,
       AppID: "bc22d5",
       AppKey: "00eec858271ea752",
       audioDeviceId: "",
